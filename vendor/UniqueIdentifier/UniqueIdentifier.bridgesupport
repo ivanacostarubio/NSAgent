@@ -1,0 +1,8 @@
+<?xml version='1.0'?>
+<signatures version='1.0'>
+<class name='UniqueIdentifier'>
+<method selector='uniqueIdentifier'>
+<retval declared_type='NSString*' type='@'/>
+</method>
+</class>
+</signatures>
