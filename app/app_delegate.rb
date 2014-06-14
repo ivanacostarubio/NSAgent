@@ -289,6 +289,33 @@ class AppDelegate
   end
 end
 
+class Persistance
+
+  def initialize(key="videos")
+    @key = key
+    @p= App::Persistence
+
+    if @p[@key].class != Array
+      @p[@key] = []
+    end
+  end
+
+  def add(url)
+    @p[@key] = @p[@key].dup << url
+  end
+
+  def values
+    @p[@key]
+  end
+
+  def remove(url)
+    v = values.dup
+    v.delete(url)
+    @p[@key] = v
+  end
+
+end
+
 class Uploader
   attr_accessor :success, :failure, :delegate
 
