@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 $:.unshift("/Library/RubyMotion/lib")
 require 'motion/project/template/osx'
+require 'motion-phrase'
 
 begin
   require 'bundler'
@@ -37,5 +38,11 @@ Motion::Project::App.setup do |app|
 
   app.pods do |pod|
      pod "Mixpanel-OSX-Community", :git => "https://github.com/orta/mixpanel-osx-unofficial.git"
+  end
+  app.development do
+    app.phrase do
+      app.phrase.enabled = true
+      app.phrase.auth_token = "c8a114bf7c361681aaa65f21854ad24c"
+    end
   end
 end
