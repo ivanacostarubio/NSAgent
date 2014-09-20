@@ -192,6 +192,7 @@ class AppDelegate
     change_icon_to_red
     @name = NSTemporaryDirectory() + time_stamp_name
     NSLog @name
+    @video = Video.new(date: actual_time)
     @tape = ScreenRecorder.new(@name, self)
     @tape.file_name = @name
     @tape.delegate = self
@@ -246,12 +247,17 @@ class AppDelegate
   end
 
   def time_stamp
-    Time.now.to_s.split(" ").join("-")
+    actual_time.to_s.split(" ").join("-")
   end
 
+  def actual_time
+    Time.now
+  end
   def uploaded_succesfull(file_url)
     puts "Ok: #{file_url}"
     NSLog(file_url)
+    @video.url = file_url
+    @video.save
     copy_to_clipboard(file_url)
     play_sound
     delete_file(@name)
