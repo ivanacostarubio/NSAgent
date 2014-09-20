@@ -24,8 +24,8 @@ class ScreenRecorder # USAGE: # @tape = ScreenRecorder.new # # start a recording
   def display_apple_terms
     App::Persistence['first_run'] = true
     msgBox = NSAlert.alloc.init
-    msgBox.setMessageText("Hello!\n\nAfter this message we'll begin recording your screen and your microphone. \n \nWhen you are ready click stop and the video will be automatically uploaded to a server. We'll copy the URL to your clipboard and we'll delete the video in 30 days. \n\nOnly people with the link will have access to it. \n\n You agree to this terms by clicking OK. \n\nHappy recording!!!.")
-    msgBox.addButtonWithTitle("OK")
+    msgBox.setMessageText("first_run_message".__)
+    msgBox.addButtonWithTitle("ok_modal".__)
     msgBox.runModal
   end
 
@@ -150,17 +150,19 @@ class AppDelegate
     @status_item.setMenu(@status_menu)
     @status_item.setHighlightMode(true)
 
-    @status_menu.addItem createMenuItem("About", 'about:')
+    @status_menu.addItem createMenuItem("about".__, 'about:')
+    @status_menu.addItem createMenuItem("videos".__, 'videos:')
+
 
     change_icon_to_black
-    @status_menu.addItem createMenuItem("Quit", 'terminate:', 'q')
+    @status_menu.addItem createMenuItem("quit".__, 'terminate:', 'q')
     
-    @record = createMenuItem("Record", 'record_fullscreen', 'r')
+    @record = createMenuItem("record".__, 'record_fullscreen', 'r')
     @status_menu.addItem @record
 #    @record_area = createMenuItem("Record Area", 'record_crop', 'R')
 #    @status_menu.addItem @record_area   
     
-    @stop = createMenuItem("Stop", 'stop', 's')
+    @stop = createMenuItem("stop".__, 'stop', 's')
     setup_mixpanel
   end
 
@@ -278,8 +280,8 @@ class AppDelegate
 
   def display_notification
     notification = NSUserNotification.alloc.init
-    notification.title = "Video Uploaded"
-    notification.informativeText = "The video link has been copied to your clipboard"
+    notification.title = "video_uploaded".__
+    notification.informativeText = "url_copied".__
     center = NSUserNotificationCenter.defaultUserNotificationCenter
     center.scheduleNotification(notification)
   end

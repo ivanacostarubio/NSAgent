@@ -1,4 +1,5 @@
 build/*
+.da*
 .repl_history
 *.DS_Store
 .repl_history
