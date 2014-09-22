@@ -6,8 +6,18 @@ class Video
     attr_accessor prop
   end
 
+  def initialize(attrs = {})
+    puts "#{self.attributes}"
+    attrs.each do |key, value|
+      self.send("#{key.to_s}=", value) if PROPERTIES.member? key.to_sym
+    end
+    puts "#{self.attributes}"
+
+  end
+
+
   def self.all
-    all_videos_hash.map{|_, value| new(value)}
+    all_videos_hash.map{|_, value| puts(value); new(value)}
   end
 
   def self.destroy_all
@@ -21,14 +31,8 @@ class Video
 
   def attributes
     PROPERTIES.inject({}) do |hash,prop|
-      hash[prop] = send(prop)
+      hash[prop] = self.send(prop)
       hash
-    end
-  end
-
-  def initialize(attributes = {})
-    attributes.each do |key, value|
-      self.send("#{key}=", value) if PROPERTIES.member? key
     end
   end
 

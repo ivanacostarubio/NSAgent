@@ -132,6 +132,7 @@ class ScreenRecorder
 end
 
 class AppDelegate
+  include TableVideos
   attr_accessor :status_menu, :windows
 
   def applicationDidFinishLaunching(notification)
@@ -151,7 +152,7 @@ class AppDelegate
     @status_item.setHighlightMode(true)
 
     @status_menu.addItem createMenuItem("about".__, 'about:')
-    @status_menu.addItem createMenuItem("videos".__, 'videos:')
+    @status_menu.addItem createMenuItem("videos".__, 'videos')
 
 
     change_icon_to_black
@@ -164,6 +165,7 @@ class AppDelegate
     
     @stop = createMenuItem("stop".__, 'stop', 's')
     setup_mixpanel
+    videos
   end
 
   def applicationWillTerminate(notification)
@@ -182,6 +184,14 @@ class AppDelegate
     NSApp.orderFrontStandardAboutPanel(sender)
   end
 
+  def videos
+    @videos_view = NSWindow.alloc.initWithContentRect([[0,500],[600,200]], styleMask:NSBorderlessWindowMask, backing:NSBackingStoreBuffered, defer:false)
+    @videos_view.setReleasedWhenClosed(false)
+    @videos_view.orderFrontRegardless
+    superview = @videos_view.contentView
+    superview.addSubview(create_table)
+  end
+
   def createMenuItem(name, action, key='')
     NSMenuItem.alloc.initWithTitle(name, action: action, keyEquivalent:key) 
   end
@@ -192,7 +202,7 @@ class AppDelegate
     change_icon_to_red
     @name = NSTemporaryDirectory() + time_stamp_name
     NSLog @name
-    @video = Video.new(date: actual_time)
+    @video_recorded = Video.new(date: actual_time)
     @tape = ScreenRecorder.new(@name, self)
     @tape.file_name = @name
     @tape.delegate = self
@@ -256,8 +266,8 @@ class AppDelegate
   def uploaded_succesfull(file_url)
     puts "Ok: #{file_url}"
     NSLog(file_url)
-    @video.url = file_url
-    @video.save
+    @video_recorded.url = file_url
+    @video_recorded.save
     copy_to_clipboard(file_url)
     play_sound
     delete_file(@name)
