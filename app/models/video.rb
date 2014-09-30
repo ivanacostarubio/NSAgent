@@ -7,17 +7,22 @@ class Video
   end
 
   def initialize(attrs = {})
-    puts "#{self.attributes}"
     attrs.each do |key, value|
       self.send("#{key.to_s}=", value) if PROPERTIES.member? key.to_sym
     end
-    puts "#{self.attributes}"
-
   end
 
 
   def self.all
-    all_videos_hash.map{|_, value| puts(value); new(value)}
+    all_videos_hash.map{|_, value| new(value)}
+  end
+
+  def self.count
+    size
+  end
+
+  def self.size
+    storage['videos'].size
   end
 
   def self.destroy_all
@@ -25,9 +30,18 @@ class Video
     store['videos'] = {}
   end
 
+  def destroy
+    store = storage
+    videos = store['videos'].mutableCopy
+    videos.delete(date.to_i.to_s)
+    store['videos'] = videos
+  end
+
   def save
     save_in_storage(attributes)
   end
+
+
 
   def attributes
     PROPERTIES.inject({}) do |hash,prop|

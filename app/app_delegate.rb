@@ -132,7 +132,6 @@ class ScreenRecorder
 end
 
 class AppDelegate
-  include TableVideos
   attr_accessor :status_menu, :windows
 
   def applicationDidFinishLaunching(notification)
@@ -150,9 +149,10 @@ class AppDelegate
     @status_item = NSStatusBar.systemStatusBar.statusItemWithLength(NSVariableStatusItemLength).init
     @status_item.setMenu(@status_menu)
     @status_item.setHighlightMode(true)
-
+    $status_item = @status_item
+    
     @status_menu.addItem createMenuItem("about".__, 'about:')
-    @status_menu.addItem createMenuItem("videos".__, 'videos')
+    @status_menu.addItem createMenuItem("videos".__, 'videos_show')
 
 
     change_icon_to_black
@@ -165,7 +165,7 @@ class AppDelegate
     
     @stop = createMenuItem("stop".__, 'stop', 's')
     setup_mixpanel
-    videos
+#    videos_show
   end
 
   def applicationWillTerminate(notification)
@@ -184,12 +184,8 @@ class AppDelegate
     NSApp.orderFrontStandardAboutPanel(sender)
   end
 
-  def videos
-    @videos_view = NSWindow.alloc.initWithContentRect([[0,500],[600,200]], styleMask:NSBorderlessWindowMask, backing:NSBackingStoreBuffered, defer:false)
-    @videos_view.setReleasedWhenClosed(false)
-    @videos_view.orderFrontRegardless
-    superview = @videos_view.contentView
-    superview.addSubview(create_table)
+  def videos_show
+    @panelController = PanelController.alloc.initWithDelegate(self,@status_item)
   end
 
   def createMenuItem(name, action, key='')
@@ -264,7 +260,6 @@ class AppDelegate
     Time.now
   end
   def uploaded_succesfull(file_url)
-    puts "Ok: #{file_url}"
     NSLog(file_url)
     @video_recorded.url = file_url
     @video_recorded.save
