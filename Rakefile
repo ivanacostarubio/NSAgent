@@ -37,7 +37,7 @@ Motion::Project::App.setup do |app|
   end
 
   app.pods do |pod|
-     pod "Mixpanel-OSX-Community", :git => "https://github.com/orta/mixpanel-osx-unofficial.git"
+     pod "Mixpanel-OSX-Community"
   end
   app.development do
     app.phrase do
